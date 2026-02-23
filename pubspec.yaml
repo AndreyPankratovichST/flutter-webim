@@ -1,0 +1,14 @@
+name: webim
+description: "A new dart package project."
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  http: ^1.6.0
+  web_socket_channel: ^3.0.3
+  get_it: ^9.2.1
+
+dev_dependencies:
