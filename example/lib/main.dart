@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:webim/webim.dart';
 
 void main() {
@@ -52,9 +51,6 @@ class _HomeScreenState extends State<_HomeScreen> {
   bool _loading = false;
   bool _faqLoading = false;
 
-  /// Один экземпляр БД сессий на всё приложение — избегаем предупреждения Drift о нескольких экземплярах.
-  DriftSessionStorage? _sessionStorage;
-
   @override
   void dispose() {
     _accountNameController.dispose();
@@ -86,20 +82,12 @@ class _HomeScreenState extends State<_HomeScreen> {
     }
     setState(() => _loading = true);
     try {
-      // Один DriftSessionStorage на приложение — один экземпляр WebimSessionDatabase (без предупреждения Drift).
-      _sessionStorage ??= DriftSessionStorage(
-        WebimSessionDatabase.fromPath(
-          '${(await getApplicationDocumentsDirectory()).path}/webim_sessions.db',
-        ),
-      );
-
       final builder = Webim.newSessionBuilder()
         ..setAccountName(accountName)
         ..setLocation(location)
         ..setWebimLogger((m) => _log('SDK: $m'))
         ..setFatalErrorHandler((e) => _log('Fatal: $e'))
-        ..setNotFatalErrorHandler((e) => _log('NotFatal: $e'))
-        ..setSessionStorage(_sessionStorage);
+        ..setNotFatalErrorHandler((e) => _log('NotFatal: $e'));
 
       final session = await builder.build();
       final stream = session.getStream();

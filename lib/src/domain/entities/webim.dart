@@ -1,10 +1,16 @@
 import 'package:webim/src/domain/entities/faq_builder.dart';
 import 'package:webim/src/domain/entities/session_builder.dart';
 import 'package:webim/src/domain/entities/webim_remote_notification.dart';
+import 'package:webim/src/domain/repositories/session_storage.dart';
 
 /// Main entry point for Webim SDK. See Webim.swift.
 abstract class Webim {
   Webim._();
+
+  /// Optional default session storage (e.g. set by `package:webim/flutter.dart`).
+  /// When set and [SessionBuilder.build] is called without [SessionBuilder.setSessionStorage],
+  /// this getter is used.
+  static Future<SessionStorage> Function()? defaultSessionStorageGetter;
 
   /// Returns new SessionBuilder for creating WebimSession.
   static SessionBuilder newSessionBuilder() => SessionBuilder();

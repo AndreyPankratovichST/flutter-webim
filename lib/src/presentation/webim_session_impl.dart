@@ -28,11 +28,12 @@ import 'package:webim/src/domain/entities/unread_by_visitor_message_count_change
 import 'package:webim/src/domain/entities/unread_by_visitor_timestamp_change_listener.dart';
 import 'package:webim/src/domain/entities/uploaded_file.dart';
 import 'package:webim/src/domain/entities/visit_session_state.dart';
-import 'package:webim/src/data/storage/drift_session_storage.dart';
-import 'package:webim/src/data/storage/webim_session_database.dart';
+import 'package:webim/src/data/storage/create_session_storage.dart';
+import 'package:webim/src/data/storage/default_session_storage_flutter.dart';
 import 'package:webim/src/domain/entities/stored_session_data.dart';
 import 'package:webim/src/domain/entities/visit_session_state_listener.dart';
 import 'package:webim/src/domain/entities/webim_internal_error.dart';
+import 'package:webim/src/domain/entities/webim.dart';
 import 'package:webim/src/domain/entities/webim_session.dart';
 import 'package:webim/src/domain/repositories/session_storage.dart';
 import 'package:webim/src/presentation/message_tracker_impl.dart';
@@ -132,18 +133,29 @@ class WebimSessionImpl implements WebimSession {
 
     SessionStorage? storage;
     String? storageKey;
+    ensureDefaultStorageRegistered();
     if (sessionStorage != null) {
       storage = sessionStorage;
       storageKey = '${accountName}_${location}_$mobileChatInstance';
-    } else if (storagePath != null && storagePath.isNotEmpty) {
-      final db = WebimSessionDatabase.fromPath(storagePath);
-      storage = DriftSessionStorage(db);
+    } else if (Webim.defaultSessionStorageGetter != null) {
+      final defaultStorage = await Webim.defaultSessionStorageGetter!();
+      storage = defaultStorage;
       storageKey = '${accountName}_${location}_$mobileChatInstance';
-
       if (isVisitorDataClearingEnabled) {
-        final lastAccount = await storage.getLastAccount();
+        final lastAccount = await defaultStorage.getLastAccount();
         if (lastAccount != null && lastAccount != accountName) {
-          await storage.clearAll();
+          await defaultStorage.clearAll();
+        }
+      }
+    } else if (storagePath != null && storagePath.isNotEmpty) {
+      storage = createSessionStorageFromPath(storagePath);
+      if (storage != null) {
+        storageKey = '${accountName}_${location}_$mobileChatInstance';
+        if (isVisitorDataClearingEnabled) {
+          final lastAccount = await storage.getLastAccount();
+          if (lastAccount != null && lastAccount != accountName) {
+            await storage.clearAll();
+          }
         }
       }
     }
