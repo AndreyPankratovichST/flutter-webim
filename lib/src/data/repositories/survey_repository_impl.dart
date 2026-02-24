@@ -1,6 +1,6 @@
-import '../../../../src/domain/entities/survey_answer.dart';
-import '../../domain/repositories/survey_repository.dart';
-import '../datasources/api_client.dart';
+import 'package:webim/src/data/datasources/api_client.dart';
+import 'package:webim/src/domain/entities/survey_answer.dart';
+import 'package:webim/src/domain/repositories/survey_repository.dart';
 
 class SurveyRepositoryImpl implements SurveyRepository {
   final ApiClient _client;

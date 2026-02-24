@@ -1,0 +1,22 @@
+---
+description: Правила автономной реализации Webim Dart SDK — сверка со Swift, проверка анализатором
+globs: lib/**/*.dart
+alwaysApply: false
+---
+
+# Webim Dart Plugin — Implementation Rules
+
+## Autonomy
+- Implement tasks **fully autonomously**. Do not ask the user for clarification.
+- Use the plan (подробный список задач по фазам) and Swift reference in `docs/WebimMobileSDK/` as the single source of truth.
+
+## After Each Task
+1. **Verify against Swift**: Compare the Dart implementation with the corresponding Swift types/methods in `docs/WebimMobileSDK/` (protocols, method signatures, enums, JSON field names from Backend/Items).
+2. **Run analyzer**: Run `dart analyze lib/` (or `flutter analyze`). Fix all errors and warnings.
+3. **Task complete only when**: Implementation matches Swift semantics/API and there are **zero** analyzer errors and **zero** analyzer warnings.
+
+## Conventions
+- Follow existing lib structure: `domain/entities`, `domain/repositories`, `data/repositories`, `data/datasources`, `domain/usecases`.
+- Use `lib/src/` for internal implementation; export only the public API from `webim.dart`.
+- Match Swift naming in public API (e.g. `getStream()`, `getVisitSessionState()`); use Dart style for private fields (e.g. `_isDestroyed`).
+- JSON keys: use the same names as in Swift (e.g. `authorId`, `clientSideId`, `ts_m`, `ts`) for server compatibility.

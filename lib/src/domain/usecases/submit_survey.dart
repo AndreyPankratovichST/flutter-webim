@@ -1,5 +1,5 @@
-import '../repositories/survey_repository.dart';
-import '../../../../src/domain/entities/survey_answer.dart';
+import 'package:webim/src/domain/entities/survey_answer.dart';
+import 'package:webim/src/domain/repositories/survey_repository.dart';
 
 class SubmitSurvey {
   final SurveyRepository _repo;

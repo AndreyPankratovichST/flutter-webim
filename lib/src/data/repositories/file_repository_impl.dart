@@ -1,8 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import '../../domain/repositories/file_repository.dart';
-import '../datasources/api_client.dart';
-import 'dart:convert';
+import 'package:webim/src/data/datasources/api_client.dart';
+import 'package:webim/src/domain/repositories/file_repository.dart';
 
 class FileRepositoryImpl implements FileRepository {
   final ApiClient _client;

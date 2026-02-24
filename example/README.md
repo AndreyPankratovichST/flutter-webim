@@ -1,17 +1,37 @@
-# example
+# Webim Example
 
-A new Flutter project.
+Пример приложения, демонстрирующий работу с пакетом `webim` (Webim SDK для Flutter).
 
-## Getting Started
+## Подключение пакета
 
-This project is a starting point for a Flutter application.
+Пакет подключён локально в `pubspec.yaml`:
 
-A few resources to get you started if this is your first Flutter project:
+```yaml
+dependencies:
+  webim:
+    path: ../
+```
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Запуск из корня репозитория: `cd example && flutter run`.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Функционал примера
+
+- **Чат**
+  - Создание сессии: `Webim.newSessionBuilder()` → `setAccountName`, `setLocation` → `build()` → `resume()`.
+  - Состояние: VisitSessionState, ChatState, текущий оператор (слушатели и отображение).
+  - Жизненный цикл: pause / resume / destroy.
+  - Сообщения: `MessageStream.newMessageTracker(MessageListener)` → `getLastMessages`, отображение списка.
+  - Отправка текста: `stream.send(text)`.
+  - Начать чат: `stream.startChat(forceStart: true)`.
+- **FAQ**
+  - Создание FAQ: `Webim.newFAQBuilder()` → `setAccountName` → `build()` → `resume()`.
+  - Корневые категории: `getRootCategories()`.
+  - Поиск: `search(query, limitOfItems: 20)`.
+- **Лог**
+  - Лог событий SDK (logger, error handlers) и действий приложения.
+- **Прочее**
+  - Демо разбора push: `Webim.isWebim(userInfo)`, `Webim.parse(userInfo, visitorId: ...)`.
+
+## Настройка
+
+По умолчанию подставлены `account name: demo` и `location: mobile`. SDK создаёт сессию через **GET /l/v/m/init** (как в Swift) и работает с официальным стендом Webim (например, demo.webim.ru). При ошибках смотрите вкладку «Лог».

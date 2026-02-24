@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:get_it/get_it.dart';
 import 'package:webim/src/domain/entities/message.dart';
-import 'package:webim/src/domain/entities/session.dart';
 
 import 'package:webim/src/data/datasources/api_client.dart';
 import 'package:webim/src/data/repositories/faq_repository_impl.dart';
@@ -12,12 +11,10 @@ import 'package:webim/src/data/repositories/session_repository_impl.dart';
 import 'package:webim/src/data/repositories/survey_repository_impl.dart';
 import 'package:webim/src/domain/entities/faq_category.dart';
 import 'package:webim/src/domain/entities/survey_answer.dart';
-import 'package:webim/src/domain/usecases/create_session.dart';
 import 'package:webim/src/domain/usecases/destroy_session.dart';
 import 'package:webim/src/domain/usecases/fetch_faq.dart';
 import 'package:webim/src/domain/usecases/fetch_history.dart';
 import 'package:webim/src/domain/usecases/listen_messages.dart';
-import 'package:webim/src/domain/usecases/refresh_token.dart';
 import 'package:webim/src/domain/usecases/send_message.dart';
 import 'package:webim/src/domain/usecases/submit_survey.dart';
 import 'package:webim/src/domain/usecases/upload_file.dart';
@@ -50,12 +47,6 @@ class WebimSdk {
       () => SurveyRepositoryImpl(getIt<ApiClient>()),
     );
 
-    getIt.registerFactory<CreateSession>(
-      () => CreateSession(getIt<SessionRepositoryImpl>()),
-    );
-    getIt.registerFactory<RefreshToken>(
-      () => RefreshToken(getIt<SessionRepositoryImpl>()),
-    );
     getIt.registerFactory<DestroySession>(
       () => DestroySession(getIt<SessionRepositoryImpl>()),
     );
@@ -73,17 +64,6 @@ class WebimSdk {
     );
     getIt.registerFactory<FetchFAQ>(() => FetchFAQ(getIt<FAQRepositoryImpl>()));
   }
-
-  Future<Session> createSession({
-    required String visitorId,
-    required String clientSideId,
-  }) => getIt<CreateSession>().call(
-    visitorId: visitorId,
-    clientSideId: clientSideId,
-  );
-
-  Future<Session> refreshToken(String token) =>
-      getIt<RefreshToken>().call(token: token);
 
   Future<void> destroySession(String sessionId) =>
       getIt<DestroySession>().call(sessionId: sessionId);

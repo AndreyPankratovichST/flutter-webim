@@ -1,4 +1,4 @@
-import '../../../../src/domain/entities/survey_answer.dart';
+import 'package:webim/src/domain/entities/survey_answer.dart';
 
 /// Repository for survey operations.
 abstract class SurveyRepository {

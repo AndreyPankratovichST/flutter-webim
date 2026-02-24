@@ -1,4 +1,4 @@
-import '../repositories/file_repository.dart';
+import 'package:webim/src/domain/repositories/file_repository.dart';
 import 'dart:io';
 
 class UploadFile {
